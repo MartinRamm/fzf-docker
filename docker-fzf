@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+A
+__docker_pre_test() {
+  if [[ $(docker ps --format '{{.Names}}') ]]; then
+    return 0;
+  fi
+  echo "No docker images running";
+  return 1;
+}
+
+__docker_compose_pre_test() {
+  if [ -z "$1" ]; then
+    if [[ $(docker-compose config --services) ]]; then
+      return 0;
+    fi
+    echo "No docker-compose.yml found (or it contains errors). You can pass as the first argument a path to the service declaration file."
+    return 1;
+  fi
+
+  if [[ $(docker-compose --file $1 config --services) ]]; then
+    return 0;
+  fi
+  echo "Invalid service declaration file $1."
+  return 1;
+}
+
+#docker restart
+dr() {
+  if __docker_pre_test; then
+    local container=$(docker ps -a --format '{{.Names}}' | fzf)
+    if [ ! -z "$container" ]; then
+      docker restart $container
+      docker logs -f $container --since 1s
+    fi
+  fi
+}
+
+#docker logs
+dl() {
+  if __docker_pre_test; then
+    local since=""
+    if [ ! -z "$1" ]; then
+      since="--since $1"
+    fi
+
+    local container=$(docker ps -a --format '{{.Names}}' | fzf)
+    if [ ! -z "$container" ]; then
+      sh -c "docker logs -f $container $since"
+    fi
+  fi
+}
+
+#docker exec
+de() {
+  if __docker_pre_test; then
+    local name=$(docker ps --format '{{.Names}}' | fzf)
+    if [ ! -z "$name" ]; then
+      docker exec -it $name ${1:/bin/sh}
+    fi
+  fi
+}
+
+#docker stop
+ds() {
+  if __docker_pre_test; then
+    local names=$(docker ps --format '{{.Names}}' | fzf -m --print0)
+    if [ ! -z "$names" ]; then
+      docker update --restart=no $names
+      docker stop $names
+    fi
+  fi
+}
+
+#docker stop all
+dsa() {
+  if __docker_pre_test; then
+    docker update --restart=no $(docker ps -q)
+    docker stop $(docker ps -q)
+  fi
+}
+
+#docker kill and remove
+dk() {
+  if __docker_pre_test; then
+    local names=$(docker ps --format '{{.Names}}' | fzf -m --print0)
+    if [ ! -z "$names" ]; then
+      docker update --restart=no $names
+      docker kill $names
+      docker rm $names -f
+    fi
+  fi
+}
+
+#docker kill an remove all
+dka() {
+  if __docker_pre_test; then
+    docker update --restart=no $(docker ps -q)
+    docker kill $(docker ps -q)
+  fi
+  if [[ $(docker ps -aq) ]]; then
+    docker rm $(docker ps -aq) -f
+  fi
+}
+
+#docker remove image
+drmi() {
+    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
+    fzf -m |
+    while read -r ref; do
+        local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
+        docker rmi $id -f
+    done
+}
+
+#docker remove all images
+drmia() {
+  if [[ $(docker images -qa) ]]; then
+    docker rmi $(docker images -qa) -f
+  fi
+}
+
+#docker clean
+dclean() {
+  dka
+  drmia
+}
+
+#docker compose up
+dcu() {
+  if __docker_compose_pre_test $1; then
+    local fileref=""
+    if [ ! -z "$1" ]; then
+      fileref="--file $1"
+    fi
+
+    local service=$(sh -c "docker-compose $fileref config --services" | fzf -m --print0)
+    if [ -z "$service" ]; then
+      return 1;
+    fi
+    sh -c "docker-compose $fileref up -d $service"
+  fi
+}
+
+#docker compose up all
+dcua() {
+  if __docker_compose_pre_test $1; then
+    local fileref=""
+    if [ ! -z "$1" ]; then
+      fileref="--file $1"
+    fi
+
+    sh -c "docker-compose $fileref up -d"
+  fi
+}
