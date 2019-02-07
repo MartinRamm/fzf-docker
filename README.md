@@ -19,7 +19,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | ------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | dr      | docker restart && open logs (in follow mode)              | single   |                                                                                                              |
 | dl      | docker logs (in follow mode)                              | single   | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
-| de      | docker exec                                               | single   | command to exec (default `/bin/sh`)                                                                          |
+| de      | docker exec in interactive mode                           | single   | command to exec (default `zsh || bash || ash || sh`)                                                         |
 | ds      | docker stop                                               | multiple |                                                                                                              |
 | dsa     | docker stop all running containers                        |          |                                                                                                              |
 | dk      | docker kill and remove                                    | multiple |                                                                                                              |

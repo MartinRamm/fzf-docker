@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-A
+
 __docker_pre_test() {
   if [[ $(docker ps --format '{{.Names}}') ]]; then
     return 0;
@@ -53,9 +53,14 @@ dl() {
 #docker exec
 de() {
   if __docker_pre_test; then
+    local command="sh -c 'zsh || bash || ash || sh'"
+    if [ ! -z "$1" ]; then
+      command=$1
+    fi
+
     local name=$(docker ps --format '{{.Names}}' | fzf)
     if [ ! -z "$name" ]; then
-      docker exec -it $name ${1:/bin/sh}
+      sh -c "docker exec -it $name $command"
     fi
   fi
 }
