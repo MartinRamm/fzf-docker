@@ -1,10 +1,16 @@
 #!/bin/bash
 
+# $1 (Optionally) - if present (value doesn't matter), this test checks if any containers exist. Else, if active (running) containers exis
 __docker_pre_test() {
-  if [[ $(docker ps --format '{{.Names}}') ]]; then
+  if [[ -z "$1" ]] && [[ $(docker ps --format '{{.Names}}') ]]; then
     return 0;
   fi
-  echo "No docker images running";
+
+  if [[ ! -z "$1" ]] && [[ $(docker ps -a --format '{{.Names}}') ]]; then
+    return 0;
+  fi
+
+  echo "No containers found";
   return 1;
 }
 
@@ -37,7 +43,7 @@ dr() {
 
 #docker logs
 dl() {
-  if __docker_pre_test; then
+  if $(__docker_pre_test "all"); then
     local since=""
     if [ ! -z "$1" ]; then
       since="--since $1"
@@ -122,7 +128,7 @@ dsa() {
 
 #docker kill and remove
 dk() {
-  if __docker_pre_test; then
+  if $(__docker_pre_test "all"); then
     local names=$(docker ps --format '{{.Names}}' | fzf -m --print0)
     if [ ! -z "$names" ]; then
       docker update --restart=no $names
@@ -134,7 +140,7 @@ dk() {
 
 #docker kill an remove all
 dka() {
-  if __docker_pre_test; then
+  if $(__docker_pre_test "all"); then
     docker update --restart=no $(docker ps -q)
     docker kill $(docker ps -q)
   fi
@@ -145,18 +151,24 @@ dka() {
 
 #docker remove image
 drmi() {
-  docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
-  fzf -m |
-  while read -r ref; do
-    local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
-    docker rmi $id -f
-  done
+  if [[ $(docker images -qa) ]]; then
+    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
+    fzf -m |
+    while read -r ref; do
+      local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
+      docker rmi $id -f
+    done
+  else
+    echo "No images found"
+  fi
 }
 
 #docker remove all images
 drmia() {
   if [[ $(docker images -qa) ]]; then
     docker rmi $(docker images -qa) -f
+  else
+    echo "No images found"
   fi
 }
 
@@ -168,7 +180,7 @@ dclean() {
 
 #docker remove
 drm() {
-  if [[ $(docker ps -aq) ]]; then
+  if $(__docker_pre_test "all"); then
     local names=$(docker ps -aq --format "{{.Names}}" | fzf -m --print0)
     if [ ! -z "$names" ]; then
       docker rm -f $names
@@ -181,7 +193,7 @@ drm() {
 
 #docker remove all
 drma() {
-  if [[ $(docker ps -aq) ]]; then
+  if $(__docker_pre_test "all"); then
     docker rm $(docker ps -aq) -f
   else
     echo "No containers found"
