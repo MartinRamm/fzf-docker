@@ -145,12 +145,12 @@ dka() {
 
 #docker remove image
 drmi() {
-    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
-    fzf -m |
-    while read -r ref; do
-        local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
-        docker rmi $id -f
-    done
+  docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
+  fzf -m |
+  while read -r ref; do
+    local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
+    docker rmi $id -f
+  done
 }
 
 #docker remove all images
