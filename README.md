@@ -24,6 +24,8 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | dsa     | docker stop all running containers                        |          |                                                                                                              |
 | dk      | docker kill and remove                                    | multiple |                                                                                                              |
 | dka     | docker kill and remove all containers                     |          |                                                                                                              |
+| drm     | docker remove container (with force)                      | multiple |                                                                                                              |
+| drma    | docker remove all containers (with force)                 |          |                                                                                                              |
 | drmi    | docker remove image (with force)                          | multiple |                                                                                                              |
 | drmia   | docker remove all images (with force)                     |          |                                                                                                              |
 | dclean  | `dka` and `drmia`                                         |          |                                                                                                              |

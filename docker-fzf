@@ -130,6 +130,29 @@ dclean() {
   drmia
 }
 
+#docker remove
+drm() {
+  if [[ $(docker ps -aq) ]]; then
+    local names=$(docker ps -aq --format "{{.Names}}" | fzf -m --print0)
+    if [ ! -z "$names" ]; then
+      docker rm -f $names
+    fi
+  else
+    echo "No containers found"
+  fi
+
+}
+
+#docker remove all
+drma() {
+  if [[ $(docker ps -aq) ]]; then
+    docker rm $(docker ps -aq) -f
+  else
+    echo "No containers found"
+  fi
+}
+
+
 #docker compose up
 dcu() {
   if __docker_compose_pre_test $1; then
