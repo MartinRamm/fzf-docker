@@ -115,6 +115,22 @@ de() {
   fi
 }
 
+#docker remove
+drm() {
+  __docker_pre_test "all" \
+    && docker ps -aq --format "{{.Names}}" \
+      | fzf -m \
+      | while read -r name; do
+          docker rm -f $name
+        done
+}
+
+#docker remove all
+drma() {
+  __docker_pre_test "all" \
+    && docker rm $(docker ps -aq) -f
+}
+
 #docker stop
 ds() {
   __docker_pre_test \
@@ -131,6 +147,30 @@ dsa() {
   if __docker_pre_test; then
     docker update --restart=no $(docker ps -q)
     docker stop $(docker ps -q)
+  fi
+}
+
+#docker stop
+dsrm() {
+  __docker_pre_test \
+    && docker ps --format '{{.Names}}' \
+      | fzf -m  \
+      | while read -r name; do
+          docker update --restart=no $name
+          docker stop $name
+          docker rm -f $name
+        done
+}
+
+#docker stop all
+dsrma() {
+  if [ -z $(docker ps -q) ]; then
+    docker update --restart=no $(docker ps -q)
+    docker stop $(docker ps -q)
+  fi
+
+  if $(__docker_pre_test "all"); then
+    docker rm -f $(docker ps -aq)
   fi
 }
 
@@ -153,20 +193,28 @@ dka() {
   fi
 }
 
-#docker remove
-drm() {
-  __docker_pre_test "all" \
-    && docker ps -aq --format "{{.Names}}" \
+#docker kill
+dkrm() {
+  __docker_pre_test \
+    && docker ps --format '{{.Names}}' | fzf -m --print0 \
       | fzf -m \
       | while read -r name; do
+          docker update --restart=no $name
+          docker kill $name
           docker rm -f $name
         done
 }
 
-#docker remove all
-drma() {
-  __docker_pre_test "all" \
-    && docker rm $(docker ps -aq) -f
+#docker kill
+dkrma() {
+  if [ -z $(docker ps -q) ]; then
+    docker update --restart=no $(docker ps -q)
+    docker kill $(docker ps -q)
+  fi
+
+  if $(__docker_pre_test "all"); then
+    docker rm -f $(docker ps -aq)
+  fi
 }
 
 #docker remove image

@@ -21,12 +21,16 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | dr      | docker restart && open logs (in follow mode)              | single   |                                                                                                              |
 | dl      | docker logs (in follow mode)                              | single   | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
 | de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
-| ds      | docker stop                                               | multiple |                                                                                                              |
-| dsa     | docker stop all running containers                        |          |                                                                                                              |
-| dk      | docker kill                                               | multiple |                                                                                                              |
-| dka     | docker kill all containers                                |          |                                                                                                              |
 | drm     | docker remove container (with force)                      | multiple |                                                                                                              |
 | drma    | docker remove all containers (with force)                 |          |                                                                                                              |
+| ds      | docker stop                                               | multiple |                                                                                                              |
+| dsa     | docker stop all running containers                        |          |                                                                                                              |
+| dsrm    | docker stop and remove container                          | multiple |                                                                                                              |
+| dsrma   | docker stop and remove all container                      |          |                                                                                                              
+| dk      | docker kill                                               | multiple |                                                                                                              |
+| dka     | docker kill all containers                                |          |                                                                                                              |
+| dkrm    | docker kill and remove container                          | multiple |                                                                                                              |
+| dkrma   | docker kill and remove all container                      |          |                                                                                                              |
 | drmi    | docker remove image (with force)                          | multiple |                                                                                                              |
 | drmia   | docker remove all images (with force)                     |          |                                                                                                              |
 | dclean  | `dka` and `drmia`                                         |          |                                                                                                              |
