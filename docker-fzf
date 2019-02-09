@@ -134,28 +134,23 @@ dsa() {
   fi
 }
 
-#docker kill and remove
+#docker kill
 dk() {
-  __docker_pre_test "all" \
-    && docker ps --format '{{.Names}}' -a | fzf -m --print0 \
+  __docker_pre_test \
+    && docker ps --format '{{.Names}}' | fzf -m --print0 \
       | fzf -m \
       | while read -r name; do
-          if [ -z $(docker ps --filter name="$name" -q) ];
-            docker update --restart=no $name
-            docker kill $name
-          fi
-          docker rm $name -f
+          docker update --restart=no $name
+          docker kill $name
         done
 }
 
-#docker kill an remove all
+#docker kill
 dka() {
-  if [[ $(docker ps -q) ]]; then
+  if __docker_pre_test; then
     docker update --restart=no $(docker ps -q)
     docker kill $(docker ps -q)
   fi
-
-  drma
 }
 
 #docker remove

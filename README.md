@@ -23,8 +23,8 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
 | ds      | docker stop                                               | multiple |                                                                                                              |
 | dsa     | docker stop all running containers                        |          |                                                                                                              |
-| dk      | docker kill and remove                                    | multiple |                                                                                                              |
-| dka     | docker kill and remove all containers                     |          |                                                                                                              |
+| dk      | docker kill                                               | multiple |                                                                                                              |
+| dka     | docker kill all containers                                |          |                                                                                                              |
 | drm     | docker remove container (with force)                      | multiple |                                                                                                              |
 | drma    | docker remove all containers (with force)                 |          |                                                                                                              |
 | drmi    | docker remove image (with force)                          | multiple |                                                                                                              |
