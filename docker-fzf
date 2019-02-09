@@ -14,6 +14,14 @@ __docker_pre_test() {
   return 1;
 }
 
+__docker_images_pre_test() {
+  if [[ $(docker images -qa) ]]; then
+    return 0;
+  fi
+  echo "No images found"
+  return 1;
+}
+
 __docker_compose_pre_test() {
   if [ -z "$1" ]; then
     if [[ $(docker-compose config --services) ]]; then
@@ -151,24 +159,20 @@ dka() {
 
 #docker remove image
 drmi() {
-  if [[ $(docker images -qa) ]]; then
-    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" |
-    fzf -m |
-    while read -r ref; do
-      local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
-      docker rmi $id -f
-    done
-  else
-    echo "No images found"
+  if __docker_images_pre_test; then
+    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" \
+      | fzf -m \
+      | while read -r ref; do
+          local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
+          docker rmi $id -f
+        done
   fi
 }
 
 #docker remove all images
 drmia() {
-  if [[ $(docker images -qa) ]]; then
+  if __docker_images_pre_test; then
     docker rmi $(docker images -qa) -f
-  else
-    echo "No images found"
   fi
 }
 
