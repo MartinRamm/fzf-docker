@@ -18,8 +18,8 @@ Feel free to create a PR with improvements - but please keep this documentation 
 
 | command | description                                               | fzf mode | command arguments (optional)                                                                                 |
 | ------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| dr      | docker restart && open logs (in follow mode)              | single   |                                                                                                              |
-| dl      | docker logs (in follow mode)                              | single   | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
+| dr      | docker restart && open logs (in follow mode)              | multiple |                                                                                                              |
+| dl      | docker logs (in follow mode)                              | multiple | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
 | de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
 | drm     | docker remove container (with force)                      | multiple |                                                                                                              |
 | drma    | docker remove all containers (with force)                 |          |                                                                                                              |
@@ -50,24 +50,27 @@ You may however add custom commands that `de` will then use to `exec` into a con
 
 # Learning by doing
 ### fzf mode = single
-The image below shows a user opening the logs of the `infrastructure_php_1_6714fd704177` container with the `dl` command.
-The command `dl` was entered into a terminal. The user now typed `php` to narrow the search for containers that contain that phrase. When the correct container was selected, the user pressed `Enter`.
-Alternatively, the user could have used the arrow keys to select the correct container id.
+The image below shows a user `exec`ing into the container `infrastructure_some-mysql_1_6fe4edd94d07` container with the `de` command.
+Because this script has a sensible default command registered for the base image of this container, `mysql` is directly opened (with the password set in the environment variable).
+
+The command `de` was entered into a terminal. The user now typed `sql` to narrow the search for containers that contain that phrase. When the correct container was selected by the user pressing `Enter`.
+Alternatively, the user could have used the arrow keys to select the correct container name.
 
 ![example gif](single.gif)
 
 ### optional command arguments
-This image does the same as above, but with `10m` as an argument. Therefore the command will only show the logs the selected container produced in the last 10 minutes.
+This image shows the `dl` command executed with `10m` as an optional argument. 
+Therefore the command will only show the logs of the selected container produced in the last 10 minutes, instead of all available logs for this container.
 
 ![example gif](args.gif)
 
 ### fzf mode = multiple
 
-The image below shows a user starting the container `whiteboard` and `redis` with the `dcu` command.
+The image below shows a user starting the services `whiteboard-1.0` and `redis` with the `dcu` command.
 To mark a containers/services in fzf, press on the `tab` key. To deselect, press `shift + tab`.
 To remove the input, press `Alt + Backspace`.
 Finally, press `Enter` to start the command. Note that when pressing `Enter`, the selected item will *not* be added automatically to your selection.
-If you only want to mark one container, you don't have to select it with tab - you can follow the instuctions of fzf mode single.
+If you only want to mark one container, you don't have to select it with tab - you can follow the instructions of fzf single mode.
 
 ![example gif](multiple.gif)
 

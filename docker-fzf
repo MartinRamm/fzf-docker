@@ -38,29 +38,59 @@ __docker_compose_pre_test() {
   return 1;
 }
 
+# $1: time interval - e.g.: `1m` for 1 minute
+# $2: names of container(s) to display logs from
+__docker_logs() (
+  local since=""
+  if [ ! -z "$1" ]; then
+    since="--since $1 "
+  fi
+
+  local count=$(wc -l <<< $2)
+  if [[ -z "$2" ]]; then
+    return 1
+  fi
+  if [[ "$count" -eq "1" ]]; then
+    sh -c "docker logs -f $since$2"
+    return 0
+  fi
+
+  local resetColor="\033[39m\033[49m"
+  while read -r name; do
+    local color=$(shuf -n 1 -e "\033[95m" "\033[41m\033[97m" "\033[94m" "\033[91m" "\033[43m\033[97m" "\033[46m" "\033[45m\033[97m" "\033[47m\033[97m" "\033[90m" "\033[m" "\033[100m" "\033[42m\033[97m" "\033[96m" "\033[44m" "\033[93m")
+    eval "docker logs -f $since\"$name\" |& sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\" &"
+  done <<< "$2"
+
+  function _exit {
+    while read -r name; do
+      pkill -f "docker logs -f $since$name"
+    done <<< "$2"
+  }
+
+  trap _exit INT TERM
+
+  wait
+)
+
 #docker restart
 dr() {
   if __docker_pre_test; then
-    local container=$(docker ps --format '{{.Names}}' | fzf)
-    if [ ! -z "$container" ]; then
-      docker restart $container
-      docker logs -f $container --since 1s
-    fi
+    local containers=$(docker ps --format '{{.Names}}' | fzf -m)
+
+    echo $containers \
+      | while read -r name; do
+          docker restart $name
+        done
+
+    __docker_logs "1s" "$containers"
   fi
 }
 
 #docker logs
 dl() {
   if $(__docker_pre_test "all"); then
-    local since=""
-    if [ ! -z "$1" ]; then
-      since="--since $1"
-    fi
-
-    local container=$(docker ps -a --format '{{.Names}}' | fzf)
-    if [ ! -z "$container" ]; then
-      sh -c "docker logs -f $container $since"
-    fi
+    local containers=$(docker ps -a --format '{{.Names}}' | fzf -m)
+    __docker_logs "$1" "$containers"
   fi
 }
 
