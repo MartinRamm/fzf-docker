@@ -41,7 +41,7 @@ __docker_compose_pre_test() {
 #docker restart
 dr() {
   if __docker_pre_test; then
-    local container=$(docker ps -a --format '{{.Names}}' | fzf)
+    local container=$(docker ps --format '{{.Names}}' | fzf)
     if [ ! -z "$container" ]; then
       docker restart $container
       docker logs -f $container --since 1s
