@@ -12,6 +12,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 
 1. Clone this repository: `git clone https://github.com/MartinRamm/fzf-docker.git`
 1. Add to your `.zshrc` or `.bashrc` file this command: `source /path/to/docker-fzf`
+1. (Optional): Customize the `de` command as described in _[Default command for `de`](#default-command-for-de)_
 
 # Overview of available commands
 
@@ -19,7 +20,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | ------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | dr      | docker restart && open logs (in follow mode)              | single   |                                                                                                              |
 | dl      | docker logs (in follow mode)                              | single   | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
-| de      | docker exec in interactive mode                           | single   | command to exec (default `zsh || bash || ash || sh`)                                                         |
+| de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
 | ds      | docker stop                                               | multiple |                                                                                                              |
 | dsa     | docker stop all running containers                        |          |                                                                                                              |
 | dk      | docker kill and remove                                    | multiple |                                                                                                              |
@@ -31,6 +32,17 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | dclean  | `dka` and `drmia`                                         |          |                                                                                                              |
 | dcu     | docker-compose up (in detached mode)                      | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcua    | docker-compose up all services (in detached mode)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+
+## Default command for `de`
+The command used to `exec` into a container is dependent on the base image.
+The fallback command used to `exec` into a container is similar to `zsh || bash || ash || sh`.
+Useful standards are already implemented for images like `mysql` or `mongo` (PRs to add more default commands are appreciated).
+
+You may however add custom commands that `de` will then use to `exec` into a container. To do this
+1. `cd /path/to/docker-fuzzy-search-commands`
+1. copy the `.docker-fuzzy-search-exec.template` to your home directory, omitting the `.template` extension: 
+`cp {,~/}.docker-fuzzy-search-exec.template && mv ~/.docker-fuzzy-search-exec{.template,}`
+1. Customize the script as described in the file.
 
 # Learning by doing
 ### fzf mode = single

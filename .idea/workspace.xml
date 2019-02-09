@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8963557a-dc4d-488c-8b04-126742d69854" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-14984346">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.0" value="3" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.3" value="2" />
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.5" value="2" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="10" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="docker-fuzzy-search" value="1" />
+          <entry key="docker-fuzzy-search-exec" value="3" />
+          <entry key="docker-fzf" value="6" />
+          <entry key="js" value="1" />
+          <entry key="json" value="1" />
+          <entry key="md" value="15" />
+          <entry key="sh" value="3" />
+          <entry key="template" value="5" />
+          <entry key="todo" value="1" />
+          <entry key="txt" value="3" />
+          <entry key="yml" value="4" />
+          <entry key="zshrc" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Bash" value="7" />
+          <entry key="JSON" value="1" />
+          <entry key="Markdown" value="15" />
+          <entry key="PLAIN_TEXT" value="10" />
+          <entry key="Scratch" value="7" />
+          <entry key="YAML" value="4" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="docker-fuzzy-search" value="553" />
+          <entry key="docker-fuzzy-search-exec" value="103" />
+          <entry key="docker-fzf" value="4423" />
+          <entry key="md" value="3018" />
+          <entry key="sh" value="48" />
+          <entry key="template" value="164" />
+          <entry key="todo" value="1" />
+          <entry key="txt" value="1" />
+          <entry key="yml" value="1" />
+          <entry key="zshrc" value="599" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Bash" value="5022" />
+          <entry key="Markdown" value="3018" />
+          <entry key="PLAIN_TEXT" value="821" />
+          <entry key="Scratch" value="49" />
+          <entry key="YAML" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docker-fzf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-256">
+              <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="FIRST">
+              <first_editor relative-caret-position="374">
+                <caret line="22" column="76" selection-start-line="22" selection-start-column="76" selection-end-line="22" selection-end-column="76" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_command='</find>
+      <find>(_command=')</find>
+      <find>(_command=)</find>
+      <find>'</find>
+      <find>dl(</find>
+      <find>read</find>
+      <find>fzf -m</find>
+      <find>docker ps -a</find>
+      <find>$name</find>
+      <find>&quot;\n</find>
+      <find>&quot;95&quot; &quot;41&quot; &quot;94&quot; &quot;91&quot; &quot;43&quot; &quot;46&quot; &quot;45&quot; &quot;97&quot; &quot;90&quot; &quot;&quot; &quot;100&quot; &quot;42&quot; &quot;96&quot; &quot;44&quot; &quot;93&quot; &quot;92&quot;</find>
+      <find>033</find>
+      <find>-eq</find>
+      <find>&quot;all&quot;</find>
+      <find>dsrma</find>
+      <find>sh -c</find>
+      <find>if</find>
+      <find />
+      <find>a +\|</find>
+      <find>fileref</find>
+      <find>local fileref</find>
+      <find>--since</find>
+      <find>dl</find>
+      <find>&quot; &quot;</find>
+      <find>33[95m&quot; &quot;\033[41m\033[97m&quot; &quot;\033[94m&quot; &quot;\033[91m&quot; &quot;\033[43m\033[97m&quot; &quot;\033[46m&quot; &quot;\033[45m\033[97m&quot; &quot;\033[47m\033[97m&quot; &quot;\033[90m&quot; &quot;\033[m&quot; &quot;\033[100m&quot; &quot;\033[42m\033[97m&quot; &quot;\033[96m&quot; &quot;\033[44m&quot; &quot;\033[93m&quot;</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>$1</replace>
+      <replace>&quot;</replace>
+      <replace>\\033</replace>
+      <replace />
+      <replace>\n</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/zshrc" />
+        <option value="$USER_HOME$/.docker-fuzzy-search" />
+        <option value="$USER_HOME$/.docker-fuzzy-search-exec" />
+        <option value="$PROJECT_DIR$/docker-fuzzy-search-exec.template" />
+        <option value="$PROJECT_DIR$/.docker-fuzzy-search-exec.template" />
+        <option value="$PROJECT_DIR$/todo" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_2.sh" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_3.sh" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_18.txt" />
+        <option value="$PROJECT_DIR$/../infrastructure/docker-compose.yml" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/docker-fzf" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="961" />
+    <option name="y" value="41" />
+    <option name="width" value="958" />
+    <option name="height" value="1038" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="docker-fuzzy-search-commands" type="b2602c69:ProjectViewProjectNode" />
+              <item name="docker-fuzzy-search-commands" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="docker-fuzzy-search-commands" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+            </path>
+            <path>
+              <item name="docker-fuzzy-search-commands" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+              <item name="Scratches" type="d62648e6:ScratchProjectViewPane$MyRootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/flexperto/Documents/git/docker-fuzzy-search-commands/README.md" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Bash&#10;TEXT" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../infrastructure/docker-compose.json" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8963557a-dc4d-488c-8b04-126742d69854" name="Default Changelist" comment="" />
+      <created>1549538495061</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1549538495061</updated>
+      <workItem from="1549538496192" duration="5310000" />
+      <workItem from="1549547961495" duration="3701000" />
+      <workItem from="1549561332712" duration="10000" />
+      <workItem from="1549724552840" duration="5320000" />
+      <workItem from="1549730129185" duration="7412000" />
+      <workItem from="1549738854637" duration="18695000" />
+      <workItem from="1549759219461" duration="1136000" />
+      <workItem from="1549804693411" duration="22451000" />
+      <workItem from="1549877418037" duration="11000" />
+      <workItem from="1549879728288" duration="606000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="64652000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="961" y="41" width="958" height="1038" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48789573" weight="0.33528784" />
+      <window_info id="Structure" order="1" sideWeight="0.5121043" side_tool="true" weight="0.33478734" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32979852" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.52386004" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32995737" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/docker-fuzzy-search-exec" />
+    <entry file="file://$USER_HOME$/.docker-fuzzy-search-exec">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="5" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.docker-fuzzy-search-exec.template">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="53" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo" />
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_2.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_16.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_17.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_3.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_18.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../infrastructure/services.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_4.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../infrastructure/docker-compose.json" />
+    <entry file="file://$PROJECT_DIR$/../infrastructure/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="407" lean-forward="true" selection-start-line="407" selection-end-line="407" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker-fzf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-256">
+          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="374">
+            <caret line="22" column="76" selection-start-line="22" selection-start-column="76" selection-end-line="22" selection-end-column="76" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Custom defaults for "docker exec"
+# The command to execute should be outputted to stdout. This is optional, so if nothing is outputted the 'normal'
+# defaults will be used.
+# Below is an example implementation
+
+# $1 is the name of the docker image to exec into
+
+_command=''
+
+# image name (without version)
+case $(docker inspect --format '{{.Config.Image}}' $1 | sed -e 's/:.*$//g') in
+
+  # EXAMPLE: for an image named "custom/mysql", use the command "mysql"
+  "custom/mysql")
+    _command='mysql -uroot -pmy-root-password'
+
+esac
+
+echo $_command
+unset _command
