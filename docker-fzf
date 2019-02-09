@@ -117,13 +117,13 @@ de() {
 
 #docker stop
 ds() {
-  if __docker_pre_test; then
-    local names=$(docker ps --format '{{.Names}}' | fzf -m --print0)
-    if [ ! -z "$names" ]; then
-      docker update --restart=no $names
-      docker stop $names
-    fi
-  fi
+  __docker_pre_test \
+    && docker ps --format '{{.Names}}' \
+      | fzf -m  \
+      | while read -r name; do
+          docker update --restart=no $name
+          docker stop $name
+        done
 }
 
 #docker stop all
@@ -136,44 +136,59 @@ dsa() {
 
 #docker kill and remove
 dk() {
-  if $(__docker_pre_test "all"); then
-    local names=$(docker ps --format '{{.Names}}' | fzf -m --print0)
-    if [ ! -z "$names" ]; then
-      docker update --restart=no $names
-      docker kill $names
-      docker rm $names -f
-    fi
-  fi
+  __docker_pre_test "all" \
+    && docker ps --format '{{.Names}}' -a | fzf -m --print0 \
+      | fzf -m \
+      | while read -r name; do
+          if [ -z $(docker ps --filter name="$name" -q) ];
+            docker update --restart=no $name
+            docker kill $name
+          fi
+          docker rm $name -f
+        done
 }
 
 #docker kill an remove all
 dka() {
-  if $(__docker_pre_test "all"); then
+  if [[ $(docker ps -q) ]]; then
     docker update --restart=no $(docker ps -q)
     docker kill $(docker ps -q)
   fi
-  if [[ $(docker ps -aq) ]]; then
-    docker rm $(docker ps -aq) -f
-  fi
+
+  drma
+}
+
+#docker remove
+drm() {
+  __docker_pre_test "all" \
+    && docker ps -aq --format "{{.Names}}" \
+      | fzf -m \
+      | while read -r name; do
+          docker rm -f $name
+        done
+}
+
+#docker remove all
+drma() {
+  __docker_pre_test "all" \
+    && docker rm $(docker ps -aq) -f
 }
 
 #docker remove image
 drmi() {
-  if __docker_images_pre_test; then
-    docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" \
+  __docker_images_pre_test \
+    && docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" \
       | fzf -m \
       | while read -r ref; do
           local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
           docker rmi $id -f
         done
-  fi
 }
 
 #docker remove all images
 drmia() {
-  if __docker_images_pre_test; then
-    docker rmi $(docker images -qa) -f
-  fi
+  __docker_images_pre_test \
+    && docker rmi $(docker images -qa) -f
 }
 
 #docker clean
@@ -182,53 +197,28 @@ dclean() {
   drmia
 }
 
-#docker remove
-drm() {
-  if $(__docker_pre_test "all"); then
-    local names=$(docker ps -aq --format "{{.Names}}" | fzf -m --print0)
-    if [ ! -z "$names" ]; then
-      docker rm -f $names
-    fi
-  else
-    echo "No containers found"
-  fi
-
-}
-
-#docker remove all
-drma() {
-  if $(__docker_pre_test "all"); then
-    docker rm $(docker ps -aq) -f
-  else
-    echo "No containers found"
-  fi
-}
-
-
 #docker compose up
 dcu() {
-  if __docker_compose_pre_test $1; then
-    local fileref=""
-    if [ ! -z "$1" ]; then
-      fileref="--file $1"
-    fi
-
-    local service=$(sh -c "docker-compose $fileref config --services" | fzf -m --print0)
-    if [ -z "$service" ]; then
-      return 1;
-    fi
-    sh -c "docker-compose $fileref up -d $service"
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
   fi
+
+  __docker_compose_pre_test $1 \
+      && sh -c "docker-compose $fileref config --services" \
+        | fzf -m \
+        | while read -r service; do
+            sh -c "docker-compose $fileref up -d $service"
+          done
 }
 
 #docker compose up all
 dcua() {
-  if __docker_compose_pre_test $1; then
-    local fileref=""
-    if [ ! -z "$1" ]; then
-      fileref="--file $1"
-    fi
-
-    sh -c "docker-compose $fileref up -d"
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
   fi
+
+  __docker_compose_pre_test $1 \
+    && sh -c "docker-compose $fileref up -d"
 }
