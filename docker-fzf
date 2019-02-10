@@ -51,15 +51,16 @@ __docker_logs() (
     return 1
   fi
   if [[ "$count" -eq "1" ]]; then
-    sh -c "docker logs -f $since$2"
+    eval "docker logs -f $since$2"
     return 0
   fi
 
   local resetColor="\033[39m\033[49m"
-  while read -r name; do
-    local color=$(shuf -n 1 -e "\033[95m" "\033[41m\033[97m" "\033[94m" "\033[91m" "\033[43m\033[97m" "\033[46m" "\033[45m\033[97m" "\033[47m\033[97m" "\033[90m" "\033[m" "\033[100m" "\033[42m\033[97m" "\033[96m" "\033[44m" "\033[93m")
-    eval "docker logs -f $since\"$name\" |& sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\" &"
-  done <<< "$2"
+  echo "$2" \
+    | while read -r name; do
+        local color=$(shuf -n 1 -e "\033[95m" "\033[41m\033[97m" "\033[94m" "\033[91m" "\033[43m\033[97m" "\033[46m" "\033[45m\033[97m" "\033[47m\033[97m" "\033[90m" "\033[m" "\033[100m" "\033[42m\033[97m" "\033[96m" "\033[44m" "\033[93m")
+        eval "docker logs -f $since\"$name\" |& sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\" &"
+      done
 
   function _exit {
     while read -r name; do
@@ -79,10 +80,11 @@ dr() {
 
     echo $containers \
       | while read -r name; do
+          echo "Restarting $name..."
           docker restart $name
         done
 
-    __docker_logs "1s" "$containers"
+    __docker_logs "1m" "$containers"
   fi
 }
 
@@ -140,7 +142,7 @@ de() {
         command="sh -c '$command'"
       fi
 
-      sh -c "docker exec -it $name $command"
+      eval "docker exec -it $name $command"
     fi
   fi
 }
@@ -194,14 +196,9 @@ dsrm() {
 
 #docker stop all
 dsrma() {
-  if [ -z $(docker ps -q) ]; then
-    docker update --restart=no $(docker ps -q)
-    docker stop $(docker ps -q)
-  fi
+  dsa
 
-  if $(__docker_pre_test "all"); then
-    docker rm -f $(docker ps -aq)
-  fi
+  drma
 }
 
 #docker kill
@@ -237,14 +234,9 @@ dkrm() {
 
 #docker kill
 dkrma() {
-  if [ -z $(docker ps -q) ]; then
-    docker update --restart=no $(docker ps -q)
-    docker kill $(docker ps -q)
-  fi
+  dka
 
-  if $(__docker_pre_test "all"); then
-    docker rm -f $(docker ps -aq)
-  fi
+  drma
 }
 
 #docker remove image
@@ -278,10 +270,10 @@ dcu() {
   fi
 
   __docker_compose_pre_test $1 \
-      && sh -c "docker-compose $fileref config --services" \
+      && eval "docker-compose $fileref config --services" \
         | fzf -m \
         | while read -r service; do
-            sh -c "docker-compose $fileref up -d $service"
+            eval "docker-compose $fileref up -d $service"
           done
 }
 
@@ -293,5 +285,5 @@ dcua() {
   fi
 
   __docker_compose_pre_test $1 \
-    && sh -c "docker-compose $fileref up -d"
+    && eval "docker-compose $fileref up -d"
 }
