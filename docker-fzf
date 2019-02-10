@@ -75,7 +75,8 @@ __docker_logs() (
 
 #docker restart
 dr() {
-  if __docker_pre_test; then
+  __docker_pre_test
+  if [ $? -eq 0 ]; then
     local containers=$(docker ps --format '{{.Names}}' | fzf -m)
 
     echo $containers \
@@ -90,7 +91,8 @@ dr() {
 
 #docker logs
 dl() {
-  if $(__docker_pre_test "all"); then
+  __docker_pre_test "all"
+  if [ $? -eq 0 ]; then
     local containers=$(docker ps -a --format '{{.Names}}' | fzf -m)
     __docker_logs "$1" "$containers"
   fi
@@ -98,7 +100,8 @@ dl() {
 
 #docker exec
 de() {
-  if __docker_pre_test; then
+  __docker_pre_test
+  if [ $? -eq 0 ]; then
     local name=$(docker ps --format '{{.Names}}' | fzf)
 
     if [ ! -z "$name" ]; then
@@ -176,7 +179,8 @@ ds() {
 
 #docker stop all
 dsa() {
-  if __docker_pre_test; then
+  __docker_pre_test
+  if [ $? -eq 0 ]; then
     docker update --restart=no $(docker ps -q)
     docker stop $(docker ps -q)
   fi
@@ -214,7 +218,8 @@ dk() {
 
 #docker kill
 dka() {
-  if __docker_pre_test; then
+  __docker_pre_test
+  if [ $? -eq 0 ]; then
     docker update --restart=no $(docker ps -q)
     docker kill $(docker ps -q)
   fi
