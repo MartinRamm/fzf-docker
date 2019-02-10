@@ -226,7 +226,7 @@ dka() {
 #docker kill
 dkrm() {
   __docker_pre_test \
-    && docker ps --format '{{.Names}}' | fzf -m --print0 \
+    && docker ps --format '{{.Names}}' \
       | fzf -m \
       | while read -r name; do
           docker update --restart=no $name
