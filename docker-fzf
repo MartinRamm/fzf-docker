@@ -22,6 +22,7 @@ __docker_images_pre_test() {
   return 1;
 }
 
+#1 (Optional) path to `docker-compose.yml` file
 __docker_compose_pre_test() {
   if [ -z "$1" ]; then
     if [[ $(docker-compose config --services) ]]; then
@@ -72,6 +73,42 @@ __docker_logs() (
 
   wait
 )
+
+#1 (Optional) path to `docker-compose.yml` file
+__docker_compose_parse_services_config() {
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
+  fi
+
+  # `docker-compose config` normalizes the indentation and format, no matter what the actual file is...
+  local config=$(eval "docker-compose $fileref config")
+
+  local inServicesBlock='false'
+  local service=''
+
+  echo $config \
+    | while IFS= read -r line; do
+        if [[ "$line" =~ "^[^: ]+:.*$" ]]; then
+          if [[ "$line" == "services:" ]]; then
+            inServicesBlock='true'
+          else
+            inServicesBlock='false'
+          fi
+        fi
+
+        if [[ "$inServicesBlock" == "true" ]]; then
+          if [[ "$line" =~ "^  [^: ]+:$" ]]; then
+            local service=$(echo $line | grep -o '[^: ]\+')
+          fi
+
+          if [[ "$line" =~ "$2" ]] && [[ ! -z "service" ]]; then
+            echo $service
+            service=''
+          fi
+        fi
+      done
+}
 
 #docker restart
 dr() {
@@ -291,4 +328,30 @@ dcua() {
 
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref up -d"
+}
+
+#docker compose build
+dcb() {
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
+  fi
+
+  __docker_compose_pre_test $1 \
+    && __docker_compose_parse_services_config "$1" '^    build:.*$' \
+      | fzf -m \
+      | while read -r service; do
+          eval "docker-compose $fileref build --force-rm --no-cache --pull $service"
+        done
+}
+
+#docker compose build all
+dcba() {
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
+  fi
+
+  __docker_compose_pre_test $1 \
+    && eval "docker-compose $fileref build --force-rm --no-cache --pull --parallel"
 }
