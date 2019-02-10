@@ -74,12 +74,15 @@ __docker_logs() (
   wait
 )
 
+__docker_compose_fileref_generator() {
+  if [ ! -z "$1" ]; then
+    echo "--file $1"
+  fi
+}
+
 #1 (Optional) path to `docker-compose.yml` file
 __docker_compose_parse_services_config() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   # `docker-compose config` normalizes the indentation and format, no matter what the actual file is...
   local config=$(eval "docker-compose $fileref config")
@@ -306,10 +309,7 @@ dclean() {
 
 #docker compose up
 dcu() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
       && eval "docker-compose $fileref config --services" \
@@ -321,10 +321,7 @@ dcu() {
 
 #docker compose up all
 dcua() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref up -d"
@@ -332,10 +329,7 @@ dcua() {
 
 #docker compose build
 dcb() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
     && __docker_compose_parse_services_config "$1" '^    build:.*$' \
@@ -347,10 +341,7 @@ dcb() {
 
 #docker compose build all
 dcba() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref build --force-rm --no-cache --pull --parallel"
@@ -358,10 +349,7 @@ dcba() {
 
 #docker compose pull
 dcp() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
     && __docker_compose_parse_services_config "$1" '^    image:.*$' \
@@ -373,10 +361,7 @@ dcp() {
 
 #docker compose pull all
 dcpa() {
-  local fileref=""
-  if [ ! -z "$1" ]; then
-    fileref="--file $1"
-  fi
+  local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref pull --ignore-pull-failures"
