@@ -266,7 +266,7 @@ drmia() {
 
 #docker clean
 dclean() {
-  dka
+  dsrma
   drmia
 }
 

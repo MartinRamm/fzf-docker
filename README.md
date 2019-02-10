@@ -33,7 +33,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | dkrma   | docker kill and remove all container                      |          |                                                                                                              |
 | drmi    | docker remove image (with force)                          | multiple |                                                                                                              |
 | drmia   | docker remove all images (with force)                     |          |                                                                                                              |
-| dclean  | `dka` and `drmia`                                         |          |                                                                                                              |
+| dclean  | `dsrma` and `drmia`                                       |          |                                                                                                              |
 | dcu     | docker-compose up (in detached mode)                      | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcua    | docker-compose up all services (in detached mode)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 
