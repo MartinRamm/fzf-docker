@@ -366,3 +366,41 @@ dcpa() {
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref pull --ignore-pull-failures"
 }
+
+#docker compose update image
+dcupd() {
+  local fileref=$(__docker_compose_fileref_generator $1)
+
+  __docker_compose_pre_test $1
+  if [ "$?" -eq "0" ]; then
+    local buildServices=$(__docker_compose_parse_services_config "$1" '^    build:.*$')
+    local pullServices=$(__docker_compose_parse_services_config "$1" '^    image:.*$')
+
+    eval "docker-compose $fileref config --services" \
+      | fzf -m \
+      | while read -r service; do
+          echo $buildServices \
+            | while read -r buildService; do
+                if [[ "$buildService" == "$service" ]]; then
+                  eval "docker-compose $fileref build --force-rm --no-cache --pull $service"
+                  continue 2;
+                fi
+              done
+
+          echo $pullServices \
+            | while read -r pullService; do
+                if [[ "$pullService" == "$service" ]]; then
+                  eval "docker-compose $fileref pull --ignore-pull-failures $service"
+                  continue 2;
+                fi
+              done
+        done
+  fi
+}
+
+#docker compose update image all services
+dcupda() {
+  dcba "$1"
+
+  dcpa "$1"
+}
