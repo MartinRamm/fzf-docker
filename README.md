@@ -38,7 +38,8 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | dcua    | docker-compose up all services (in detached mode)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcb     | docker-compose build (with --no-cache and --pull)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcba    | docker-compose build (with --no-cache and --pull) all     |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-
+| dcp     | docker-compose pull                                       | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcpa    | docker-compose pull all                                   |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 
 ## Default command for `de`
 The command used to `exec` into a container is dependent on the base image.

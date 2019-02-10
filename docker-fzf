@@ -355,3 +355,29 @@ dcba() {
   __docker_compose_pre_test $1 \
     && eval "docker-compose $fileref build --force-rm --no-cache --pull --parallel"
 }
+
+#docker compose pull
+dcp() {
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
+  fi
+
+  __docker_compose_pre_test $1 \
+    && __docker_compose_parse_services_config "$1" '^    image:.*$' \
+      | fzf -m \
+      | while read -r service; do
+          eval "docker-compose $fileref pull --ignore-pull-failures $service"
+        done
+}
+
+#docker compose pull all
+dcpa() {
+  local fileref=""
+  if [ ! -z "$1" ]; then
+    fileref="--file $1"
+  fi
+
+  __docker_compose_pre_test $1 \
+    && eval "docker-compose $fileref pull --ignore-pull-failures"
+}
