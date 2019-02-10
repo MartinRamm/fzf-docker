@@ -35,7 +35,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | drmia   | docker remove all images (with force)                     |          |                                                                                                              |
 | dclean  | `dsrma` and `drmia`                                       |          |                                                                                                              |
 | dcu     | docker-compose up (in detached mode)                      | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcua    | docker-compose up all services (in detached mode)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcua    | docker-compose up all services (in detached mode)         |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcb     | docker-compose build (with --no-cache and --pull)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcba    | docker-compose build (with --no-cache and --pull) all     |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 | dcp     | docker-compose pull                                       | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
