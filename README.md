@@ -20,6 +20,7 @@ Feel free to create a PR with improvements - but please keep this documentation 
 | ------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | dr      | docker restart && open logs (in follow mode)              | multiple |                                                                                                              |
 | dl      | docker logs (in follow mode)                              | multiple | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
+| dla     | docker logs (in follow mode) all containers               |          | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
 | de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
 | drm     | docker remove container (with force)                      | multiple |                                                                                                              |
 | drma    | docker remove all containers (with force)                 |          |                                                                                                              |

@@ -138,6 +138,15 @@ dl() {
   fi
 }
 
+#docker logs all
+dla() {
+  __docker_pre_test "all"
+  if [ $? -eq 0 ]; then
+    local containers=$(docker ps -a --format '{{.Names}}')
+    __docker_logs "$1" "$containers"
+  fi
+}
+
 #docker exec
 de() {
   __docker_pre_test
