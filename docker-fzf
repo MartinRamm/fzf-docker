@@ -57,9 +57,17 @@ __docker_logs() (
   fi
 
   local resetColor="\033[39m\033[49m"
+  #list of 48 distinct colors
+  local allColors="\033[90m\n\033[92m\n\033[93m\n\033[94m\n\033[95m\n\033[96m\n\033[97m\n\033[30m\n\033[31m\n\033[32m\n\033[33m\n\033[34m\n\033[35m\n\033[36m\n\033[40m\033[90m\n\033[40m\033[91m\n\033[40m\033[92m\n\033[40m\033[94m\n\033[40m\033[95m\n\033[40m\033[96m\n\033[40m\033[97m\n\033[41m\033[90m\n\033[41m\033[93m\n\033[41m\033[95m\n\033[41m\033[97m\n\033[42m\033[90m\n\033[42m\033[93m\n\033[42m\033[97m\n\033[43m\033[90m\n\033[43m\033[93m\n\033[43m\033[97m\n\033[44m\033[91m\n\033[44m\033[92m\n\033[44m\033[93m\n\033[44m\033[95m\n\033[44m\033[97m\n\033[45m\033[93m\n\033[45m\033[97m\n\033[46m\033[90m\n\033[46m\033[91m\n\033[46m\033[92m\n\033[46m\033[93m\n\033[46m\033[96m\n\033[46m\033[97m\n\033[47m\033[90m\n\033[47m\033[95m\n\033[47m\033[96m\n"
+  #list of `$count` number of distinct colors
+  local colors=$(echo $allColors | shuf -n $count)
   echo "$2" \
     | while read -r name; do
-        local color=$(shuf -n 1 -e "\033[95m" "\033[41m\033[97m" "\033[94m" "\033[91m" "\033[43m\033[97m" "\033[46m" "\033[45m\033[97m" "\033[47m\033[97m" "\033[90m" "\033[m" "\033[100m" "\033[42m\033[97m" "\033[96m" "\033[44m" "\033[93m")
+        #last color from list
+        local color=$(echo $colors | tail -n 1)
+        #update list - remove last color from list
+        colors=$(echo $colors | head -n -1)
+
         eval "docker logs -f $since\"$name\" |& sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\" &"
       done
 
