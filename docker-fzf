@@ -421,3 +421,31 @@ dcupda() {
 
   dcpa "$1"
 }
+
+fzf-docker-debug-info() {
+  location="${BASH_SOURCE[0]}"
+  if [ -z "$location" ]; then #fzf
+    location=$(type -a $0 | sed "s/$0 is a shell function from //g")
+  fi;
+  gitRepo="$(dirname $location)/.git"
+  commitHash=$(eval "git --git-dir $gitRepo rev-parse HEAD")
+  latestTag=$(eval "git --git-dir $gitRepo describe --tags")
+  fzfDockerVersion="$latestTag ($commitHash)"
+
+  shellEnvironment=$(ps p "$$" o cmd=)
+
+  shell=$(echo $shellEnvironment | grep -oE "^\S+")
+  shellVersion=$(eval "$shell --version")
+  fzfVersion=$(fzf --version)
+
+  dockerVersion=$(docker --version)
+  dockerComposeVersion=$(docker-compose --version)
+
+  dockerExecCustomDefaults=$(test -f "$HOME/.docker-fuzzy-search-exec" && cat "$HOME/.docker-fuzzy-search-exec" || echo "N.A.")
+
+  for v in "fzfDockerVersion" "shellEnvironment" "shellVersion" "fzfVersion" "dockerVersion" "dockerComposeVersion" "dockerExecCustomDefaults"; do
+    echo -e "${v}:"
+    v=$(eval "echo -e \"\$$v\"" | sed 's/^/\t/g')
+    echo -e "$v"
+  done;
+}
