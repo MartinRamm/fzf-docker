@@ -194,9 +194,9 @@ de() {
 
           *)
             command='sh'
-            command=" ash; if [ \"\$?\" == \"127\" ]; then $command; fi"
-            command="bash; if [ \"\$?\" == \"127\" ]; then $command; fi"
-            command=" zsh; if [ \"\$?\" == \"127\" ]; then $command; fi"
+            command=" ash; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
+            command="bash; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
+            command=" zsh; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
         esac
 
         command="sh -c '$command'"
