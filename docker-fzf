@@ -126,7 +126,7 @@ dr() {
   if [ $? -eq 0 ]; then
     local containers=$(docker ps --format '{{.Names}}' | fzf -m)
 
-    echo $containers \
+    echo -e "$containers" \
       | while read -r name; do
           echo "Restarting $name..."
           docker restart $name
