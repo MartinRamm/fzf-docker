@@ -60,26 +60,31 @@ __docker_logs() (
   #list of 48 distinct colors
   local allColors="\033[90m\n\033[92m\n\033[93m\n\033[94m\n\033[95m\n\033[96m\n\033[97m\n\033[30m\n\033[31m\n\033[32m\n\033[33m\n\033[34m\n\033[35m\n\033[36m\n\033[40m\033[90m\n\033[40m\033[91m\n\033[40m\033[92m\n\033[40m\033[94m\n\033[40m\033[95m\n\033[40m\033[96m\n\033[40m\033[97m\n\033[41m\033[90m\n\033[41m\033[93m\n\033[41m\033[95m\n\033[41m\033[97m\n\033[42m\033[90m\n\033[42m\033[93m\n\033[42m\033[97m\n\033[43m\033[90m\n\033[43m\033[93m\n\033[43m\033[97m\n\033[44m\033[91m\n\033[44m\033[92m\n\033[44m\033[93m\n\033[44m\033[95m\n\033[44m\033[97m\n\033[45m\033[93m\n\033[45m\033[97m\n\033[46m\033[90m\n\033[46m\033[91m\n\033[46m\033[92m\n\033[46m\033[93m\n\033[46m\033[96m\n\033[46m\033[97m\n\033[47m\033[90m\n\033[47m\033[95m\n\033[47m\033[96m\n"
   #list of `$count` number of distinct colors
-  local colors=$(echo $allColors | shuf -n $count)
-  echo "$2" \
-    | while read -r name; do
-        #last color from list
-        local color=$(echo $colors | tail -n 1)
-        #update list - remove last color from list
-        colors=$(echo $colors | head -n -1)
+  local colors=$(echo -e "$allColors" | shuf -n $count)
 
-        eval "docker logs -f $since\"$name\" |& sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\" &"
-      done
+  local pids=()
+  while read -r name; do
+    # last color from list
+    local color=$(echo -e "$colors" | tail -n 1)
+    # update list - remove last color from list
+    colors=$(echo -e "$colors" | head -n -1)
+
+    # in bash, to get the pid for `docker logs` (so we can kill it in _exit), use `command1 > >(command2)` instead of `command1 | command2` - see https://stackoverflow.com/a/8048493/2732818
+    eval "docker logs -f $since\"$name\" 2>&1 > >(sed -e \"s/^/`printf \"${color}[$name]${resetColor}\"` /\") &"
+    pids+=($!)
+  done <<< "$2" # bash executes while loops in pipe in subshell, meaning pids will not be available outside of loop when using `echo -e "$2" | while...`
 
   function _exit {
-    while read -r name; do
-      pkill -f "docker logs -f $since$name"
-    done <<< "$2"
+    for pid in "${pids[@]}"; do
+      # ignore if process is not alive anymore
+      kill -9 $pid > /dev/null 2> /dev/null
+    done
   }
+  trap _exit INT TERM SIGTERM
 
-  trap _exit INT TERM
-
-  wait
+  for pid in "${pids[@]}"; do
+    wait $pid
+  done
 )
 
 __docker_compose_fileref_generator() {
