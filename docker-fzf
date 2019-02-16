@@ -89,6 +89,7 @@ __docker_compose_fileref_generator() {
 }
 
 #1 (Optional) path to `docker-compose.yml` file
+#2 A regexp that needs to be present in the docker-compose.yml file for this command to return it
 __docker_compose_parse_services_config() {
   local fileref=$(__docker_compose_fileref_generator $1)
 
@@ -98,23 +99,21 @@ __docker_compose_parse_services_config() {
   local inServicesBlock='false'
   local service=''
 
-  echo $config \
+  echo -e "$config" \
     | while IFS= read -r line; do
-        if [[ "$line" =~ "^[^: ]+:.*$" ]]; then
-          if [[ "$line" == "services:" ]]; then
-            inServicesBlock='true'
-          else
-            inServicesBlock='false'
-          fi
+        if [[ "$line" == "services:" ]]; then
+          inServicesBlock='true'
+        elif [[ "$line" =~ ^[^:" "]+:.*$ ]]; then
+          inServicesBlock='false'
         fi
 
         if [[ "$inServicesBlock" == "true" ]]; then
-          if [[ "$line" =~ "^  [^: ]+:$" ]]; then
-            local service=$(echo $line | grep -o '[^: ]\+')
+          if [[ "$line" =~ ^" "{2}[^:" "]+:$ ]]; then
+            local service=$(echo -e "$line" | grep -o '[^: ]\+')
           fi
 
-          if [[ "$line" =~ "$2" ]] && [[ ! -z "service" ]]; then
-            echo $service
+          if [[ "$line" =~ $2 ]] && [[ ! -z "service" ]]; then
+            echo "$service"
             service=''
           fi
         fi
@@ -396,7 +395,7 @@ dcupd() {
     eval "docker-compose $fileref config --services" \
       | fzf -m \
       | while read -r service; do
-          echo $buildServices \
+          echo -e "$buildServices" \
             | while read -r buildService; do
                 if [[ "$buildService" == "$service" ]]; then
                   eval "docker-compose $fileref build --force-rm --no-cache --pull $service"
@@ -404,7 +403,7 @@ dcupd() {
                 fi
               done
 
-          echo $pullServices \
+          echo -e "$pullServices" \
             | while read -r pullService; do
                 if [[ "$pullService" == "$service" ]]; then
                   eval "docker-compose $fileref pull --ignore-pull-failures $service"
