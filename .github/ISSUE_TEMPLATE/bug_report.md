@@ -1,24 +1,27 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: "\U0001F41B Bug Report"
+about: "If something doesn't work as you are expecting \U0001F629"
 title: ''
-labels: ''
+labels: bug
 assignees: MartinRamm
 
 ---
 
 ## Which command(s) are affected by the bug?
-_For example: `de`_
+<!-- For example: `de` -->
 
 ## What did you expect to happen?
-_For example: When selecting the nginx container, `bash` opens in interactive mode_
+<!-- For example: When selecting the nginx container, `bash` opens in interactive mode  -->
 
 ## What actually happened?
-_For example: An error is thrown: `sh: 1: [: 127: unexpected operator`_
+<!-- For example: An error is thrown: `sh: 1: [: 127: unexpected operator` -->
 
-## Example Docker container
-If relevant, please add a `docker run` or docker-compose.yml file here to help reproduce the issue.
-_For example: `docker run -d nginx`_
+## Example docker setup
+<!-- If relevant, please add a `docker run` or docker-compose.yml file here to help reproduce the issue. -->
+<!-- For example: `docker run -d nginx` -->
 
 ## Output of `fzf-docker-debug-info`
-Please run `fzf-docker-debug-info` in your terminal, and paste the output below. It gathers information about the environment `fzf-docker` is running in. **Make sure it does not contain any data you don't wish to share!**
+<!-- Please run `fzf-docker-debug-info` in your terminal, and paste the output below. It gathers information about the environment `fzf-docker` is running in. **Make sure it does not contain any data you don't wish to share!**  -->
+```
+[paste fzf-docker-debug-info output here]
+```
