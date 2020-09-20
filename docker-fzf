@@ -229,10 +229,7 @@ de() {
           ;;
 
           *)
-            command='sh'
-            command=" ash; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
-            command="bash; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
-            command=" zsh; if [ \"\$?\" -eq \"127\" ]; then $command; fi"
+            command='command $(command -v zsh || command -v bash || command -v ash || command -v sh)'
         esac
 
         command="sh -c '$command'"
