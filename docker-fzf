@@ -349,16 +349,16 @@ drmi() {
     local images='';
 
     # create image references for non-dangling images
-    for id in $(docker images --format "{{.ID}}" --filter "dangling=false" | sort | uniq); do
+    for id in $(docker images --format "{{.ID}}" --filter "dangling=false" | sort | uniq); do #remove duplicate ids. necessary because each image tag has an entry, and images may have multiple tags
       local references=$(docker inspect "$id" --format "{{range .RepoTags}}{{.}}\n{{end}}{{range .RepoDigests}}{{.}}\n{{end}}");
 
-      local list=$(echo "$references" | sed 's/\\n$//' | sed -r 's/\\n/\n/g');
+      local list=$(echo "$references" | sed 's/\\n$//' | sed -r 's/\\n/\n/g'); #remove trailing new line && replace \n with actual new line
       local listLength=$(echo "$list" | wc -l);
       local head=$(echo "$list" | head -n 1);
       local tail=$(echo "$list" | tail -n 1);
 
       local result="$id\t";
-      for ref in $(echo "$list"); do
+      for ref in $(echo -e "$list"); do
         if [[ "$head" == "$ref" ]]; then
           result+="$ref";
           if [[ "$listLength" == "2" ]]; then
@@ -393,7 +393,7 @@ drmi() {
         images+="\n$allDanglingImages";
       fi
 
-      #group by label
+      #add options, group by label
       local idCreatedLabel='';
       for id in $(echo "$ids" | head -n 20); do
         local created=$(docker inspect "$id" --format "{{.Created}}");
@@ -406,7 +406,7 @@ drmi() {
           else
             idCreatedLabel+="\n$reference";
           fi
-        done <<< "$(echo "$labels" | sed 's/\\n$//' | sed -r 's/\\n/\n/g')";
+        done <<< "$(echo "$labels" | sed 's/\\n$//' | sed -r 's/\\n/\n/g')"; #remove trailing new line && replace \n with actual new line
       done;
 
       local awk=''
@@ -417,19 +417,23 @@ drmi() {
       #b = max created date
       #c = max created id
       awk+='{'
-      awk+='a[$3]=a[$3] ? a[$3]","$1 : $1' #create a CSV list of ids (grouped by label)
-      awk+=';'
-      awk+='if(!b[$3] || b[$3] < $2) {' #if the current row created date is bigger than all dates in previous rows
-      awk+='b[$3]=$2' #set date
-      awk+=';'
-      awk+='c[$3]=$1' #set id
-      awk+='}'
+        awk+='a[$3]=a[$3] ? a[$3]","$1 : $1' #create a CSV list of ids (grouped by label)
+        awk+=';'
+        awk+='if(!b[$3] || b[$3] < $2){' #if the current row created date is bigger than all dates in previous rows
+          awk+='b[$3]=$2' #set date
+          awk+=';'
+          awk+='c[$3]=$1' #set id
+        awk+='}'
       awk+='}'
       awk+='END'
       awk+='{'
-      awk+='for (i in a){'
-      awk+='print (i ? i : "none")"\t"a[i]"\t"c[i]' #replace no label with "none" here, as otherwise the splitting of columns didn't work below
-      awk+='}'
+        awk+='for (i in a){'
+          awk+='print (i ? i : "none")' #replace no label with "none" here, as otherwise the splitting of columns didn't work below
+          awk+='"\t"'
+          awk+='a[i]'
+          awk+='"\t"'
+          awk+='c[i]'
+        awk+='}'
       awk+='}'
       while read -r labelIdsLatestId; do
         local label="$(echo -e "$labelIdsLatestId" | cut -f 1)"
@@ -438,7 +442,7 @@ drmi() {
         local latestBuildId="$(echo -e "$labelIdsLatestId" | cut -f 3)"
 
         local labelReference="";
-        if [[ "$label" == "none" ]]; then #see awk
+        if [[ "$label" == "none" ]]; then #see awk. since labels always contain key and value (seperated by a colon), this is safe
           labelReference='that have no label';
         else
           labelReference="that have the label $label";
@@ -464,6 +468,8 @@ drmi() {
       done <<< "$(echo -e "$idCreatedLabel" | awk -F "\t" "$awk")"
     fi;
 
+    #column1 contains ids. multiple ids per line may be comma seperated
+    #because there may be an overlap in dangling image ids, remove duplicates.
     echo -e "$images" \
       | fzf -m -d "\t" --with-nth=2 \
       | cut -f 1 \
