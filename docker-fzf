@@ -336,13 +336,145 @@ dkrma() {
 
 #docker remove image
 drmi() {
-  __docker_images_pre_test \
-    && docker images --format "{{.Repository}}:{{.Tag}}" --filter "dangling=false" \
-      | fzf -m \
-      | while read -r ref; do
-          local id=$(docker images --filter "reference=$ref" --format "{{.ID}}")
-          docker rmi $id -f
-        done
+  __docker_images_pre_test;
+  if [ "$?" -eq "0" ]; then
+    echo "Loading images. Depending on the number of images you have, this may take a while...";
+
+    #column1: comma seperated list of ids to be removed if this option is selected
+    #column2: text to be displayed to the user.
+    #seperator: tab ("\t")
+    local images='';
+
+    # create image references for non-dangling images
+    for id in $(docker images --format "{{.ID}}" --filter "dangling=false" | sort | uniq); do #remove duplicate ids. necessary because each image tag has an entry, and images may have multiple tags
+      local references=$(docker inspect "$id" --format "{{range .RepoTags}}{{.}}\n{{end}}{{range .RepoDigests}}{{.}}\n{{end}}");
+
+      local list=$(echo "$references" | sed 's/\\n$//' | sed -r 's/\\n/\n/g'); #remove trailing new line && replace \n with actual new line
+      local listLength=$(echo "$list" | wc -l);
+      local head=$(echo "$list" | head -n 1);
+      local tail=$(echo "$list" | tail -n 1);
+
+      local result="$id\t";
+      for ref in $(echo -e "$list"); do
+        if [[ "$head" == "$ref" ]]; then
+          result+="$ref";
+          if [[ "$listLength" == "2" ]]; then
+            result+=" (alias: ";
+          elif [[ "$listLength" != "1" ]]; then
+            result+=" (aliases: ";
+          fi;
+        elif [[ "$tail" == "$ref" ]]; then
+            result+="$ref)";
+        else
+            result+="$ref, ";
+        fi;
+      done;
+
+      if [[ "$images" == "" ]]; then
+        images="$result";
+      else
+        images+="\n$result";
+      fi
+    done;
+
+  # create image references for dangling images
+    local ids=$(docker images --format "{{.ID}}" --filter "dangling=true");
+    local numberOfIds=$(echo "$ids" | wc -l)
+    if [[ "$numberOfIds" != "0" ]]; then
+      #add option to remove all dangling images
+      local allDanglingImages=$(echo -e "$ids" | sed ':a; N; s/\n/,/; ta'); # join all ids into CSV list
+      allDanglingImages+="\tAll dangling images (total of $numberOfIds)";
+      if [[ "$images" == "" ]]; then
+        images="$allDanglingImages";
+      else
+        images+="\n$allDanglingImages";
+      fi
+
+      #add options, group by label
+      local idCreatedLabel='';
+      for id in $(echo "$ids" | head -n 20); do
+        local created=$(docker inspect "$id" --format "{{.Created}}");
+        local labels=$(docker inspect "$id" --format '{{ range $key, $value := .Config.Labels }}{{ $key }}:{{$value}}\n{{end}}');
+
+        while read -r label; do #also entered for no label
+          local reference=$(echo -e "$id\t$created\t$label");
+          if [[ "$idCreatedLabel" == "" ]]; then
+            idCreatedLabel="$reference";
+          else
+            idCreatedLabel+="\n$reference";
+          fi
+        done <<< "$(echo "$labels" | sed 's/\\n$//' | sed -r 's/\\n/\n/g')"; #remove trailing new line && replace \n with actual new line
+      done;
+
+      #$1=id
+      #$2=created date
+      #$3=label
+      #a = all ids that belong to label
+      #b = max created date
+      #c = max created id
+      # shellcheck disable=SC2016
+      local awk='
+      {
+        a[$3] = a[$3] ? a[$3]","$1 : $1; #create a CSV list of ids (grouped by label)
+
+        if( !b[$3] || b[$3] < $2 ) { #if the current row created date is bigger than all dates in previous rows
+          b[$3] = $2; #set date
+          c[$3] = $1; #set id
+        }
+      } END {
+        for ( i in a ) {
+          print (i ? i : "none") #replace no label with "none" here, as otherwise the splitting of columns didnt work below
+          "\t"
+          a[i]
+          "\t"
+          c[i];
+        }
+      }'
+      while read -r labelIdsLatestId; do
+        local label="$(echo -e "$labelIdsLatestId" | cut -f 1)"
+        local allIds="$(echo -e "$labelIdsLatestId" | cut -f 2)"
+        local numberOfIds="$(echo "$allIds" | awk -F ',' '{print NF}')"
+        local latestBuildId="$(echo -e "$labelIdsLatestId" | cut -f 3)"
+
+        local labelReference="";
+        if [[ "$label" == "none" ]]; then #see awk. since labels always contain key and value (seperated by a colon), this is safe
+          labelReference='that have no label';
+        else
+          labelReference="that have the label $label";
+        fi;
+
+        local imagesPluralOrSingular="image"
+        if [[ "$numberOfIds" != "1" ]]; then
+          imagesPluralOrSingular+="s";
+        fi;
+
+        images+="\n$allIds\tAll dangling $imagesPluralOrSingular (total of $numberOfIds) $labelReference"
+
+        if [[ "$numberOfIds" != "1" ]]; then
+          local idsWithoutLatest="$(echo "$allIds" | sed -r "s/(^$latestBuildId,|,$latestBuildId)//")"
+
+          imagesPluralOrSingular="image"
+          if [[ "$numberOfIds" != "2" ]]; then #2 because the number of ids still includes the id to keep (newest created date)
+            imagesPluralOrSingular+="s";
+          fi;
+
+          images+="\n$idsWithoutLatest\tAll EXCEPT THE NEWEST dangling $imagesPluralOrSingular (total of $((numberOfIds-1))) $labelReference"
+        fi;
+      done <<< "$(echo -e "$idCreatedLabel" | awk -F "\t" "$awk")"
+    fi;
+
+    #column1 contains ids. multiple ids per line may be comma seperated
+    #because there may be an overlap in dangling image ids, remove duplicates.
+    echo -e "$images" \
+      | fzf -m -d "\t" --with-nth=2 \
+      | cut -f 1 \
+      | sed 's/,/\n/g' \
+      | sort \
+      | uniq \
+      | while read -r idToRemove; do
+          docker rmi "$idToRemove"
+        done;
+  fi;
 }
 
 #docker remove all images

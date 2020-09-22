@@ -16,33 +16,33 @@ Feel free to create a PR with improvements - but please keep this documentation 
 
 # Overview of available commands
 
-| command | description                                               | fzf mode | command arguments (optional)                                                                                 |
-| ------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| dr      | docker restart && open logs (in follow mode)              | multiple |                                                                                                              |
-| dl      | docker logs (in follow mode)                              | multiple | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
-| dla     | docker logs (in follow mode) all containers               |          | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
-| de      | docker exec in interactive mode                           | single   | command to exec (default - see below)                                                                        |
-| drm     | docker remove container (with force)                      | multiple |                                                                                                              |
-| drma    | docker remove all containers (with force)                 |          |                                                                                                              |
-| ds      | docker stop                                               | multiple |                                                                                                              |
-| dsa     | docker stop all running containers                        |          |                                                                                                              |
-| dsrm    | docker stop and remove container                          | multiple |                                                                                                              |
-| dsrma   | docker stop and remove all container                      |          |                                                                                                              
-| dk      | docker kill                                               | multiple |                                                                                                              |
-| dka     | docker kill all containers                                |          |                                                                                                              |
-| dkrm    | docker kill and remove container                          | multiple |                                                                                                              |
-| dkrma   | docker kill and remove all container                      |          |                                                                                                              |
-| drmi    | docker remove image (with force)                          | multiple |                                                                                                              |
-| drmia   | docker remove all images (with force)                     |          |                                                                                                              |
-| dclean  | `dsrma` and `drmia`                                       |          |                                                                                                              |
-| dcu     | docker-compose up (in detached mode)                      | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcua    | docker-compose up all services (in detached mode)         |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcb     | docker-compose build (with --no-cache and --pull)         | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcba    | docker-compose build (with --no-cache and --pull) all     |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcp     | docker-compose pull                                       | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcpa    | docker-compose pull all services                          |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcupd   | docker-compose update image (rebuild or pull)             | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
-| dcupda  | `dcba` and `dcpa`                                         |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| command | description                                                                        | fzf mode | command arguments (optional)                                                                                 |
+| ------- | ---------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| dr      | docker restart && open logs (in follow mode)                                       | multiple |                                                                                                              |
+| dl      | docker logs (in follow mode)                                                       | multiple | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
+| dla     | docker logs (in follow mode) all containers                                        |          | time interval - e.g.: `1m` for 1 minute - (defaults to all available logs)                                   |
+| de      | docker exec in interactive mode                                                    | single   | command to exec (default - see below)                                                                        |
+| drm     | docker remove container (with force)                                               | multiple |                                                                                                              |
+| drma    | docker remove all containers (with force)                                          |          |                                                                                                              |
+| ds      | docker stop                                                                        | multiple |                                                                                                              |
+| dsa     | docker stop all running containers                                                 |          |                                                                                                              |
+| dsrm    | docker stop and remove container                                                   | multiple |                                                                                                              |
+| dsrma   | docker stop and remove all container                                               |          |                                                                                                              
+| dk      | docker kill                                                                        | multiple |                                                                                                              |
+| dka     | docker kill all containers                                                         |          |                                                                                                              |
+| dkrm    | docker kill and remove container                                                   | multiple |                                                                                                              |
+| dkrma   | docker kill and remove all container                                               |          |                                                                                                              |
+| drmi    | docker remove image (with force). This includes options to remove dangling images. | multiple |                                                                                                              |
+| drmia   | docker remove all images (with force). This includes dangling images.              |          |                                                                                                              |
+| dclean  | `dsrma` and `drmia`                                                                |          |                                                                                                              |
+| dcu     | docker-compose up (in detached mode)                                               | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcua    | docker-compose up all services (in detached mode)                                  |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcb     | docker-compose build (with --no-cache and --pull)                                  | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcba    | docker-compose build (with --no-cache and --pull) all                              |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcp     | docker-compose pull                                                                | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcpa    | docker-compose pull all services                                                   |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcupd   | docker-compose update image (rebuild or pull)                                      | multiple | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
+| dcupda  | `dcba` and `dcpa`                                                                  |          | path to docker-compose file (defaults to recursive search for `docker-compose.yml` or `docker-compose.yaml`) |
 
 ## Default command for `de`
 The command used to `exec` into a container is dependent on the base image.
