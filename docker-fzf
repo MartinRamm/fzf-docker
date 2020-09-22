@@ -409,32 +409,30 @@ drmi() {
         done <<< "$(echo "$labels" | sed 's/\\n$//' | sed -r 's/\\n/\n/g')"; #remove trailing new line && replace \n with actual new line
       done;
 
-      local awk=''
       #$1=id
       #$2=created date
       #$3=label
       #a = all ids that belong to label
       #b = max created date
       #c = max created id
-      awk+='{'
-        awk+='a[$3]=a[$3] ? a[$3]","$1 : $1' #create a CSV list of ids (grouped by label)
-        awk+=';'
-        awk+='if(!b[$3] || b[$3] < $2){' #if the current row created date is bigger than all dates in previous rows
-          awk+='b[$3]=$2' #set date
-          awk+=';'
-          awk+='c[$3]=$1' #set id
-        awk+='}'
-      awk+='}'
-      awk+='END'
-      awk+='{'
-        awk+='for (i in a){'
-          awk+='print (i ? i : "none")' #replace no label with "none" here, as otherwise the splitting of columns didn't work below
-          awk+='"\t"'
-          awk+='a[i]'
-          awk+='"\t"'
-          awk+='c[i]'
-        awk+='}'
-      awk+='}'
+      # shellcheck disable=SC2016
+      local awk='
+      {
+        a[$3] = a[$3] ? a[$3]","$1 : $1; #create a CSV list of ids (grouped by label)
+
+        if( !b[$3] || b[$3] < $2 ) { #if the current row created date is bigger than all dates in previous rows
+          b[$3] = $2; #set date
+          c[$3] = $1; #set id
+        }
+      } END {
+        for ( i in a ) {
+          print (i ? i : "none") #replace no label with "none" here, as otherwise the splitting of columns didnt work below
+          "\t"
+          a[i]
+          "\t"
+          c[i];
+        }
+      }'
       while read -r labelIdsLatestId; do
         local label="$(echo -e "$labelIdsLatestId" | cut -f 1)"
         local allIds="$(echo -e "$labelIdsLatestId" | cut -f 2)"
