@@ -215,7 +215,7 @@ de() {
             command='if [ -z "$MONGO_INITDB_ROOT_USERNAME" ]; then mongo; else mongo -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD"; fi'
           ;;
           "bitnami/mongodb")
-            command='if [ -z "$MONGODB_USERNAME" ]; then mongo; else mongo -u "$MONGODB_USERNAME" -p "$MONGODB_PASSWORD" "$MONGODB_DATABASE"; fi'
+            command='if [ ! -z "$MONGODB_ROOT_PASSWORD" ]; then mongo -u root -p "$MONGODB_ROOT_PASSWORD"; elif [ ! -z $MONGODB_USERNAME ]; then mongo -u "$MONGODB_USERNAME" -p "$MONGODB_PASSWORD" "$MONGODB_DATABASE"; else mongo; fi'
           ;;
           centos/mongodb*)
             command='mongo -u "admin" -p "$MONGODB_ADMIN_PASSWORD" --authenticationDatabase admin'
