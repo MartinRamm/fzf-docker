@@ -25,14 +25,14 @@ __docker_images_pre_test() {
 #1 (Optional) path to `docker-compose.yml` file
 __docker_compose_pre_test() {
   if [ -z "$1" ]; then
-    if [[ $(docker-compose config --services) ]]; then
+    if [[ $(docker compose config --services) ]]; then
       return 0;
     fi
     echo "No docker-compose.yml found (or it contains errors). You can pass as the first argument a path to the service declaration file."
     return 1;
   fi
 
-  if [[ $(docker-compose --file $1 config --services) ]]; then
+  if [[ $(docker compose --file $1 config --services) ]]; then
     return 0;
   fi
   echo "Invalid service declaration file $1."
@@ -494,10 +494,10 @@ dcu() {
   local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
-      && eval "docker-compose $fileref config --services" \
+      && eval "docker compose $fileref config --services" \
         | fzf -m \
         | while read -r service; do
-            eval "docker-compose $fileref up -d $service"
+            eval "docker compose $fileref up -d $service"
           done
 }
 
@@ -506,7 +506,7 @@ dcua() {
   local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
-    && eval "docker-compose $fileref up -d"
+    && eval "docker compose $fileref up -d"
 }
 
 #docker compose build
@@ -517,7 +517,7 @@ dcb() {
     && __docker_compose_parse_services_config "$1" '^    build:.*$' \
       | fzf -m \
       | while read -r service; do
-          eval "docker-compose $fileref build --force-rm --no-cache --pull $service"
+          eval "docker compose $fileref build --force-rm --no-cache --pull $service"
         done
 }
 
@@ -526,7 +526,7 @@ dcba() {
   local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
-    && eval "docker-compose $fileref build --force-rm --no-cache --pull --parallel"
+    && eval "docker compose $fileref build --force-rm --no-cache --pull --parallel"
 }
 
 #docker compose pull
@@ -537,7 +537,7 @@ dcp() {
     && __docker_compose_parse_services_config "$1" '^    image:.*$' \
       | fzf -m \
       | while read -r service; do
-          eval "docker-compose $fileref pull --ignore-pull-failures $service"
+          eval "docker compose $fileref pull --ignore-pull-failures $service"
         done
 }
 
@@ -546,7 +546,7 @@ dcpa() {
   local fileref=$(__docker_compose_fileref_generator $1)
 
   __docker_compose_pre_test $1 \
-    && eval "docker-compose $fileref pull --ignore-pull-failures"
+    && eval "docker compose $fileref pull --ignore-pull-failures"
 }
 
 #docker compose update image
@@ -558,13 +558,13 @@ dcupd() {
     local buildServices=$(__docker_compose_parse_services_config "$1" '^    build:.*$')
     local pullServices=$(__docker_compose_parse_services_config "$1" '^    image:.*$')
 
-    eval "docker-compose $fileref config --services" \
+    eval "docker compose $fileref config --services" \
       | fzf -m \
       | while read -r service; do
           echo -e "$buildServices" \
             | while read -r buildService; do
                 if [[ "$buildService" == "$service" ]]; then
-                  eval "docker-compose $fileref build --force-rm --no-cache --pull $service"
+                  eval "docker compose $fileref build --force-rm --no-cache --pull $service"
                   continue 2;
                 fi
               done
@@ -572,7 +572,7 @@ dcupd() {
           echo -e "$pullServices" \
             | while read -r pullService; do
                 if [[ "$pullService" == "$service" ]]; then
-                  eval "docker-compose $fileref pull --ignore-pull-failures $service"
+                  eval "docker compose $fileref pull --ignore-pull-failures $service"
                   continue 2;
                 fi
               done
@@ -604,7 +604,7 @@ fzf-docker-debug-info() {
   fzfVersion=$(fzf --version)
 
   dockerVersion=$(docker --version)
-  dockerComposeVersion=$(docker-compose --version)
+  dockerComposeVersion=$(docker compose --version)
 
   dockerExecCustomDefaults=$(test -f "$HOME/.docker-fuzzy-search-exec" && cat "$HOME/.docker-fuzzy-search-exec" || echo "N.A.")
 
